@@ -17,238 +17,64 @@ const Preguntas = () => {
   const [sexo, setSexo] = useState("");
   const [tituloPregunta, setTituloPregunta] = useState("");
 
-  // Preguntas iniciales
-  const iniciales = [
-   {
-          id: 1,
-          titulo:
-            "¿Cuáles son los principales programas y servicios que el Ministerio de la Mujer ofrece para ayudar a mujeres que son víctimas de violencia de género? ¿Cómo se puede acceder a ellos de forma rápida y segura?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 2,
-          titulo:
-            "¿Qué acciones concretas está tomando el Ministerio para prevenir la violencia intrafamiliar y los feminicidios, que siguen siendo un problema grave en el país?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 3,
-          titulo:
-            "¿Existen programas de apoyo económico o capacitación laboral dirigidos a mujeres de escasos recursos, especialmente a madres solteras, para que logren su independencia financiera? Si es así, ¿cuáles son los requisitos?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 4,
-          titulo:
-            "¿Cómo está colaborando el Ministerio con otras instituciones, como el Ministerio de Educación y el Ministerio de Salud Pública, para implementar programas de educación sexual y reproductiva en escuelas y comunidades?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 5,
-          titulo:
-            "¿Qué iniciativas se están desarrollando para promover la igualdad salarial y la participación de la mujer en roles de liderazgo en el sector público y privado?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 6,
-          titulo:
-            "¿De qué manera el Ministerio está abordando la problemática del embarazo adolescente y qué planes tiene para reducir las altas tasas que se registran en el país?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 7,
-          titulo:
-            "¿Hay programas de asistencia legal y psicológica gratuitos para mujeres que necesitan asesoramiento en casos de divorcio, pensión alimenticia o custodias? ¿Cómo se solicitan?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 8,
-          titulo:
-            "¿Qué acciones está tomando el Ministerio para proteger y apoyar a grupos vulnerables de mujeres, como las migrantes, las mujeres con discapacidad o las de la comunidad LGTBIQ+?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 9,
-          titulo:
-            "¿Cómo se fiscaliza el uso de los fondos asignados al Ministerio para asegurar que los programas lleguen realmente a las mujeres que más los necesitan en todo el país, incluyendo las zonas rurales y fronterizas?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 10,
-          titulo:
-            "¿Cómo pueden los ciudadanos, organizaciones de la sociedad civil y el sector privado colaborar activamente con el Ministerio de la Mujer en sus diferentes proyectos y campañas?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 11,
-          titulo:
-            "¿Cómo puede el Ministerio de la Mujer colaborar con los hombres para prevenir la violencia de género y los feminicidios? ¿Hay programas o campañas dirigidas a nosotros para que seamos parte de la solución?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Hombre",
-        },
-        {
-          id: 12,
-          titulo:
-            "Si una mujer de mi familia (madre, hermana, hija) sufre de violencia, ¿a qué servicios de ayuda, como apoyo psicológico o asistencia legal, puede acceder a través del Ministerio?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Hombre",
-        },
-        {
-          id: 13,
-          titulo:
-            "¿Qué recursos ofrece el Ministerio a las familias en general para promover relaciones sanas y equitativas en el hogar?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 14,
-          titulo:
-            "¿Qué apoyo brinda el Ministerio de la Mujer a mujeres que son emprendedoras o dueñas de pequeños negocios? ¿Qué impacto tiene ese apoyo en la economía familiar y en la sociedad?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 15,
-          titulo:
-            "¿De qué manera el Ministerio está trabajando para eliminar la desigualdad salarial y fomentar que más mujeres ocupen puestos de liderazgo en las empresas y el gobierno?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 16,
-          titulo:
-            "¿Existen programas de educación o charlas para que los jóvenes entiendan la importancia de la equidad de género desde temprano?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 17,
-          titulo:
-            "¿Cómo está el Ministerio de la Mujer lidiando con el problema del embarazo adolescente en el país, y cómo puede ayudar a las familias a enfrentar esa situación?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 18,
-          titulo:
-            "¿Qué tan accesible es el Ministerio en las zonas rurales y qué servicios específicos tiene para las mujeres del campo?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-        {
-          id: 19,
-          titulo:
-            "¿Cómo pueden los hombres participar o colaborar como voluntarios en las iniciativas del Ministerio?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Hombre",
-        },
-        {
-          id: 20,
-          titulo:
-            "¿De qué forma el Ministerio de la Mujer aborda la equidad para todas las mujeres, incluyendo a aquellas de comunidades marginadas o que tienen discapacidades?",
-          respuesta: "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-          abierta: false,
-          nombre: "Usuario inicial",
-          sexo: "Mujer",
-        },
-  ];
+  // Función para traer preguntas desde el backend
+  const cargarPreguntas = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/preguntas");
+      const data = await res.json();
 
-  // Cargar preguntas desde localStorage o iniciales
-  useEffect(() => {
-    const guardadas = localStorage.getItem("preguntas");
-    if (guardadas) {
-      const parsed = JSON.parse(guardadas);
-      if (parsed.length > 0) {
-        setPreguntas(parsed);
-      } else {
-        setPreguntas(iniciales);
-        localStorage.setItem("preguntas", JSON.stringify(iniciales));
-      }
-    } else {
-      setPreguntas(iniciales);
-      localStorage.setItem("preguntas", JSON.stringify(iniciales));
+      const normalizadas = data.map((p) => ({
+        id: p.id,
+        titulo: p.titulo || "Pregunta sin título",
+        respuesta:
+          "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
+        abierta: false,
+        nombre: p.nombre || "Usuario",
+        sexo: p.sexo || "Mujer",
+      }));
+
+      setPreguntas(normalizadas);
+    } catch (err) {
+      console.error("Error cargando preguntas:", err);
     }
+  };
+
+  // Al montar el componente, traer preguntas
+  useEffect(() => {
+    cargarPreguntas();
   }, []);
 
-  // Guardar preguntas en localStorage cuando cambien
-  useEffect(() => {
-    localStorage.setItem("preguntas", JSON.stringify(preguntas));
-  }, [preguntas]);
-
+  // Alternar visibilidad de respuesta
   const togglePregunta = (id) => {
-    setPreguntas(
-      preguntas.map((p) =>
-        p.id === id ? { ...p, abierta: !p.abierta } : p
-      )
+    setPreguntas((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, abierta: !p.abierta } : p))
     );
   };
 
-  const guardarPregunta = () => {
+  // Guardar nueva pregunta
+  const guardarPregunta = async () => {
     if (!tituloPregunta.trim() || !nombre.trim() || !sexo) return;
 
-    const nueva = {
-      id: Date.now(),
-      titulo: tituloPregunta,
-      respuesta:
-        "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-      abierta: false,
-      nombre,
-      sexo,
-    };
+    const nueva = { titulo: tituloPregunta, sexo, nombre };
 
-    setPreguntas([nueva, ...preguntas]);
-    setTituloPregunta("");
-    setNombre("");
-    setSexo("");
-    setMostrarModal(false);
+    try {
+      await fetch("http://localhost:5000/preguntas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nueva),
+      });
+
+      // volver a traer todas las preguntas desde el backend
+      await cargarPreguntas();
+
+      // limpiar modal
+      setTituloPregunta("");
+      setNombre("");
+      setSexo("");
+      setMostrarModal(false);
+    } catch (err) {
+      console.error("Error al guardar la pregunta:", err);
+    }
   };
 
   // Conteo para gráfica
@@ -277,11 +103,10 @@ const Preguntas = () => {
   };
 
   // Filtro de búsqueda
-  let filtradas = preguntas.filter((p) =>
-    p.titulo.toLowerCase().includes(busqueda.toLowerCase())
+  let filtradas = preguntas.filter(
+    (p) => p.titulo && p.titulo.toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  // Vista de últimas 10 o todas
   if (modoVista === "ultimas") {
     filtradas = filtradas.slice(0, 10);
   }
@@ -384,7 +209,7 @@ const Preguntas = () => {
       <div className="max-w-6xl mx-auto space-y-4">
         {filtradas.map((p) => (
           <div
-            key={p.id}
+            key={p.id} // <- Esto soluciona tu warning de "key"
             className="border-2 border-gray-400 rounded-lg bg-white shadow-sm overflow-hidden"
           >
             <div

@@ -8,10 +8,10 @@ app.use(express.json());
 
 // Configuración de conexión
 const config = {
-  user: "estefani", // tu usuario SQL Server
-  password: "nenita02", // tu contraseña
-  server: "PC_ESTEFANI_ST", // tu servidor
-  database: "MinisterioMujerDB",
+  user: "sa", // tu usuario SQL Server
+  password: "mmujer$00p", // tu contraseña
+  server: "192.168.1.7", // tu servidor
+  database: "EPARTICIPATION",
   options: {
     encrypt: false,
     trustServerCertificate: true,

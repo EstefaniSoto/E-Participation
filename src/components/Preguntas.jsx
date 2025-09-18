@@ -24,14 +24,14 @@ const Preguntas = () => {
       const data = await res.json();
 
       const normalizadas = data.map((p) => ({
-        id: p.id,
-        titulo: p.titulo || "Pregunta sin título",
-        respuesta:
-          "Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.",
-        abierta: false,
-        nombre: p.nombre || "Usuario",
-        sexo: p.sexo || "Mujer",
-      }));
+  id: p.id,
+  titulo: p.titulo || "Pregunta sin título",
+  respuestas: p.respuestas !== null && p.respuestas !== "" ? p.respuestas : null,
+  abierta: false,
+  nombre: p.nombre || "Usuario",
+  sexo: p.sexo || "Mujer",
+}));
+
 
       setPreguntas(normalizadas);
     } catch (err) {
@@ -225,14 +225,23 @@ const Preguntas = () => {
                 )}
               </span>
             </div>
+
             {p.abierta && (
-              <div className="px-4 pb-3 text-gray-600">
-                {p.respuesta}
-                <p className="text-sm text-gray-500 mt-2">
-                  Preguntado por: <b>{p.nombre}</b> ({p.sexo})
-                </p>
-              </div>
-            )}
+  <div className="px-4 pb-3 text-gray-600">
+    {p.respuestas ? (
+      <p className="text-green-700 font-medium">{p.respuestas}</p>
+    ) : (
+      <p className="text-gray-500">
+        Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.
+      </p>
+    )}
+    <p className="text-sm text-gray-500 mt-2">
+      Preguntado por: <b>{p.nombre}</b> ({p.sexo})
+    </p>
+  </div>
+)}
+
+
           </div>
         ))}
       </div>

@@ -3,7 +3,9 @@ const cors = require("cors");
 const sql = require("mssql");
 
 const app = express();
+
 app.use(cors());
+app.options("*", cors());
 app.use(express.json());
 
 // Configuración de conexión SQL

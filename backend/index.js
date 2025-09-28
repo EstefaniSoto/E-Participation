@@ -1,35 +1,32 @@
 const express = require("express");
 const cors = require("cors");
-const sql = require("mssql");
+const mysql = require("mysql2/promise"); // Usamos mysql2 con promesas
 
 const app = express();
 
 app.use(cors());
-app.options("*", cors());
 app.use(express.json());
 
-// Configuración de conexión SQL
-const config = {
-  user: "sa",
+// Configuración de conexión MySQL
+const pool = mysql.createPool({
+  host: "localhost",   // Servidor MySQL
+  user: "root",          // Tu usuario MySQL (cambia si es otro)
   password: "mmujer$00p",
-  server: "192.168.1.7",
   database: "EPARTICIPATION",
-  options: {
-    encrypt: false,
-    trustServerCertificate: true,
-  },
-};
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 
 // GET: obtener todas las preguntas
 app.get("/preguntas", async (req, res) => {
   try {
-    const pool = await sql.connect(config);
-    const result = await pool.request().query(`
+    const [rows] = await pool.query(`
       SELECT Id AS id, Titulo AS titulo, Sexo AS sexo, Nombre AS nombre, Respuestas AS respuestas
       FROM Preguntas
       ORDER BY Id DESC
     `);
-    res.json(result.recordset);
+    res.json(rows);
   } catch (err) {
     console.error("Error GET /preguntas:", err);
     res.status(500).json({ error: "Error al obtener preguntas" });
@@ -40,13 +37,10 @@ app.get("/preguntas", async (req, res) => {
 app.post("/preguntas", async (req, res) => {
   const { titulo, nombre, sexo, respuestas } = req.body;
   try {
-    const pool = await sql.connect(config);
-    await pool.request()
-      .input("Titulo", sql.NVarChar, titulo)
-      .input("Nombre", sql.NVarChar, nombre)
-      .input("Sexo", sql.NVarChar, sexo)
-      .input("Respuestas", sql.NVarChar, respuestas)
-      .query("INSERT INTO Preguntas (Titulo, Nombre, Sexo, respuestas) VALUES (@Titulo, @Nombre, @Sexo, @Respuestas)");
+    await pool.query(
+      "INSERT INTO Preguntas (Titulo, Nombre, Sexo, Respuestas) VALUES (?, ?, ?, ?)",
+      [titulo, nombre, sexo, respuestas]
+    );
     res.json({ message: "Pregunta guardada" });
   } catch (err) {
     console.error("Error POST /preguntas:", err);
@@ -59,12 +53,10 @@ app.put("/preguntas/:id/respuesta", async (req, res) => {
   const { id } = req.params;
   const { respuestas, usuario } = req.body;
   try {
-    const pool = await sql.connect(config);
-    await pool.request()
-      .input("id", sql.Int, parseInt(id))
-      .input("respuestas", sql.NVarChar, respuestas)
-      .input("usuario", sql.NVarChar, usuario)
-      .query("UPDATE Preguntas SET respuestas = @respuestas, nombre = @usuario WHERE Id = @id");
+    await pool.query(
+      "UPDATE Preguntas SET Respuestas = ?, Nombre = ? WHERE Id = ?",
+      [respuestas, usuario, id]
+    );
     res.json({ message: "Respuesta guardada" });
   } catch (err) {
     console.error("Error PUT /preguntas/:id/respuesta:", err);

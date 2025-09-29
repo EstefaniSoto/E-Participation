@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
+import API from "../../api"; // importa tu instancia axios
 
 export default function Respuestas({ usuario }) {
   const [preguntas, setPreguntas] = useState([]);
   const [respuestas, setRespuestas] = useState({});
 
+  // Cargar preguntas desde la API
   const cargarPreguntas = async () => {
     try {
-      const res = await fetch("http://localhost:5000/preguntas");
-      const data = await res.json();
+      const { data } = await API.get("/Preguntas");
       setPreguntas(data);
     } catch (err) {
       console.error("Error cargando preguntas:", err);
+      alert("Error al cargar preguntas.");
     }
   };
 
-  const guardarRespuesta = async (id) => {
+  // Guardar respuesta enviando el objeto completo según Swagger
+  const guardarRespuesta = async (pregunta) => {
     try {
-      await fetch(`http://localhost:5000/preguntas/${id}/respuesta`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ respuestas: respuestas[id], usuario: usuario.email }),
-      });
+      const actualizado = {
+        ...pregunta,
+        respuestas: respuestas[pregunta.id] || "",
+      };
+
+      await API.put(`/Preguntas/${pregunta.id}/respuesta`, actualizado);
 
       alert("Respuesta guardada!");
-      setRespuestas((prev) => ({ ...prev, [id]: "" }));
+      setRespuestas((prev) => ({ ...prev, [pregunta.id]: "" }));
       cargarPreguntas();
     } catch (err) {
       console.error("Error guardando respuesta:", err);
@@ -58,7 +62,7 @@ export default function Respuestas({ usuario }) {
             />
 
             <button
-              onClick={() => guardarRespuesta(p.id)}
+              onClick={() => guardarRespuesta(p)}
               className="mt-2 bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700"
             >
               Responder

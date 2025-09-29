@@ -3,6 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import API from "../../api"; // importa tu instancia axios
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -17,21 +18,20 @@ const Preguntas = () => {
   const [sexo, setSexo] = useState("");
   const [tituloPregunta, setTituloPregunta] = useState("");
 
-  // Función para traer preguntas desde el backend
+  // Cargar preguntas desde el backend
   const cargarPreguntas = async () => {
     try {
-      const res = await fetch("http://localhost:5000/preguntas");
-      const data = await res.json();
+      const res = await API.get("/Preguntas");
+      const data = res.data;
 
       const normalizadas = data.map((p) => ({
-  id: p.id,
-  titulo: p.titulo || "Pregunta sin título",
-  respuestas: p.respuestas !== null && p.respuestas !== "" ? p.respuestas : null,
-  abierta: false,
-  nombre: p.nombre || "Usuario",
-  sexo: p.sexo || "Mujer",
-}));
-
+        id: p.id,
+        titulo: p.titulo || "Pregunta sin título",
+        respuestas: p.respuestas ? p.respuestas : null,
+        abierta: false,
+        nombre: p.nombre || "Usuario",
+        sexo: p.sexo || "Mujer",
+      }));
 
       setPreguntas(normalizadas);
     } catch (err) {
@@ -39,7 +39,6 @@ const Preguntas = () => {
     }
   };
 
-  // Al montar el componente, traer preguntas
   useEffect(() => {
     cargarPreguntas();
   }, []);
@@ -58,13 +57,7 @@ const Preguntas = () => {
     const nueva = { titulo: tituloPregunta, sexo, nombre };
 
     try {
-      await fetch("http://localhost:5000/preguntas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nueva),
-      });
-
-      // volver a traer todas las preguntas desde el backend
+      await API.post("/Preguntas", nueva);
       await cargarPreguntas();
 
       // limpiar modal
@@ -119,8 +112,8 @@ const Preguntas = () => {
           onClick={() => setMostrarModal(true)}
           className="bg-blue-700 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 flex gap-2 items-center"
         >
-          <img src="./img/add.png" alt="" className="w-5 h-5" />{" "}
-          <p className=" font-bold">Añadir pregunta</p>
+          <img src="./img/add.png" alt="" className="w-5 h-5" />
+          <p className="font-bold">Añadir pregunta</p>
         </button>
         <button
           onClick={generarPDF}
@@ -209,7 +202,7 @@ const Preguntas = () => {
       <div className="max-w-6xl mx-auto space-y-4">
         {filtradas.map((p) => (
           <div
-            key={p.id} // <- Esto soluciona tu warning de "key"
+            key={p.id}
             className="border-2 border-gray-400 rounded-lg bg-white shadow-sm overflow-hidden"
           >
             <div
@@ -219,29 +212,28 @@ const Preguntas = () => {
               <span className="font-medium text-gray-800">{p.titulo}</span>
               <span className="text-xl">
                 {p.abierta ? (
-                  <img src="./img/close.png" width={10} />
+                  <img src="./img/close.png" width={10} alt="cerrar" />
                 ) : (
-                  <img src="./img/add_edit.png" width={10} />
+                  <img src="./img/add_edit.png" width={10} alt="abrir" />
                 )}
               </span>
             </div>
 
             {p.abierta && (
-  <div className="px-4 pb-3 text-gray-600">
-    {p.respuestas ? (
-      <p className="text-green-700 font-medium">{p.respuestas}</p>
-    ) : (
-      <p className="text-gray-500">
-        Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.
-      </p>
-    )}
-    <p className="text-sm text-gray-500 mt-2">
-      Preguntado por: <b>{p.nombre}</b> ({p.sexo})
-    </p>
-  </div>
-)}
-
-
+              <div className="px-4 pb-3 text-gray-600">
+                {p.respuestas ? (
+                  <p className="text-green-700 font-medium">{p.respuestas}</p>
+                ) : (
+                  <p className="text-gray-500">
+                    Tu pregunta ha sido registrada. Un administrador podrá
+                    responderla pronto.
+                  </p>
+                )}
+                <p className="text-sm text-gray-500 mt-2">
+                  Preguntado por: <b>{p.nombre}</b> ({p.sexo})
+                </p>
+              </div>
+            )}
           </div>
         ))}
       </div>

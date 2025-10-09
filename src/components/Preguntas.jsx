@@ -107,7 +107,7 @@ const Preguntas = () => {
   return (
     <div className="min-h-screen p-6">
       {/* Botones */}
-      <div className="flex flex-col md:flex-row gap-3 justify-center mb-6 bg-white py-3 rounded-2xl border-2 border-gray-200">
+      <div className="flex flex-row gap-3 justify-center mb-6 bg-white py-3 rounded-2xl lg:border-2 border-gray-200">
         <button
           onClick={() => setMostrarModal(true)}
           className="bg-blue-700 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 flex gap-2 items-center"
@@ -117,7 +117,7 @@ const Preguntas = () => {
         </button>
         <button
           onClick={generarPDF}
-          className="bg-red-700 py-2 px-3 rounded-lg hover:bg-red-800"
+          className="bg-red-700 py-2 px-3 rounded-lg hover:bg-red-800 hidden lg:flex"
         >
           <img src="./img/archivo-pdf.png" alt="" width={20} />
         </button>

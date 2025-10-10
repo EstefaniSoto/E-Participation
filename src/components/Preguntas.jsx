@@ -3,7 +3,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import API from "../../api"; // importa tu instancia axios
+import Swal from "sweetalert2";
+import API from "../../api"; 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -51,24 +52,48 @@ const Preguntas = () => {
   };
 
   // Guardar nueva pregunta
-  const guardarPregunta = async () => {
-    if (!tituloPregunta.trim() || !nombre.trim() || !sexo) return;
+const guardarPregunta = async () => {
+  // Validar campos obligatorios
+  if (!tituloPregunta.trim() || !nombre.trim() || !sexo) {
+    Swal.fire({
+      icon: "warning",
+      title: "Campos incompletos",
+      text: "Por favor, completa todos los campos antes de enviar tu pregunta.",
+      confirmButtonColor: "#6a1b9a",
+    });
+    return;
+  }
 
-    const nueva = { titulo: tituloPregunta, sexo, nombre };
+  const nueva = { titulo: tituloPregunta, sexo, nombre };
 
-    try {
-      await API.post("/Preguntas", nueva);
-      await cargarPreguntas();
+  try {
+    await API.post("/Preguntas", nueva);
+    await cargarPreguntas();
 
-      // limpiar modal
-      setTituloPregunta("");
-      setNombre("");
-      setSexo("");
-      setMostrarModal(false);
-    } catch (err) {
-      console.error("Error al guardar la pregunta:", err);
-    }
-  };
+    Swal.fire({
+      title: "¡Pregunta registrada!",
+      text: "Tu pregunta ha sido enviada correctamente.",
+      icon: "success",
+      confirmButtonColor: "#6a1b9a",
+    });
+
+    // Limpiar modal y campos
+    setTituloPregunta("");
+    setNombre("");
+    setSexo("");
+    setMostrarModal(false);
+  } catch (err) {
+    console.error("Error al guardar la pregunta:", err);
+
+    Swal.fire({
+      icon: "error",
+      title: "Error al enviar",
+      text: "Hubo un problema al registrar tu pregunta. Intenta nuevamente.",
+      confirmButtonColor: "#d33",
+    });
+  }
+};
+
 
   // Conteo para gráfica
   const hombres = preguntas.filter((p) => p.sexo === "Hombre").length;
@@ -105,15 +130,15 @@ const Preguntas = () => {
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen px-6 lg:py-6">
       {/* Botones */}
       <div className="flex flex-row gap-3 justify-center mb-6 bg-white py-3 rounded-2xl lg:border-2 border-gray-200">
         <button
           onClick={() => setMostrarModal(true)}
-          className="bg-blue-700 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 flex gap-2 items-center"
+          className="bg-blue-700 text-white px-3 py-3 lg:py-2 lg:px-4 rounded-full lg:rounded-lg shadow hover:bg-blue-700 flex gap-2 items-center"
         >
-          <img src="./img/add.png" alt="" className="w-5 h-5" />
-          <p className="font-bold">Añadir pregunta</p>
+          <img src="./img/add.png" alt="" className="w-6 h-5 lg:w-5 lg:h-5" />
+          <p className="font-bold hidden lg:flex">Añadir pregunta</p>
         </button>
         <button
           onClick={generarPDF}
@@ -126,12 +151,12 @@ const Preguntas = () => {
           placeholder="Buscar pregunta..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          className="border px-4 py-2 rounded-lg w-full md:w-2xl border-gray-300"
+          className="border-2 border-blue-500 px-4 py-2 rounded-full w-full md:w-2xl "
         />
 
         <button
           onClick={() => setModoVista("ultimas")}
-          className={`px-4 py-2 rounded-lg font-bold ${
+          className={`px-4 py-2 rounded-lg font-bold hidden lg:flex ${
             modoVista === "ultimas"
               ? "bg-red-700 text-white"
               : "bg-red-300 text-white"
@@ -142,7 +167,7 @@ const Preguntas = () => {
 
         <button
           onClick={() => setModoVista("todas")}
-          className={`px-4 py-2 rounded-lg font-bold ${
+          className={`px-4 py-2 rounded-lg font-bold hidden lg:flex ${
             modoVista === "todas"
               ? "bg-blue-700 text-white"
               : "bg-blue-300 text-white"
@@ -156,7 +181,7 @@ const Preguntas = () => {
       {mostrarModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold mb-4">Nueva Pregunta</h2>
+            <h2 className="text-lg font-bold mb-4 text-center text-gray-800">Nueva Pregunta</h2>
             <input
               type="text"
               placeholder="Tu nombre"
@@ -199,47 +224,44 @@ const Preguntas = () => {
       )}
 
       {/* Listado */}
-      <div className="max-w-6xl mx-auto space-y-4">
-        {filtradas.map((p) => (
-          <div
-            key={p.id}
-            className="border-2 border-gray-400 rounded-lg bg-white shadow-sm overflow-hidden"
-          >
-            <div
-              className="flex justify-between items-center px-4 py-3 cursor-pointer hover:bg-gray-100"
-              onClick={() => togglePregunta(p.id)}
-            >
-              <span className="font-medium text-gray-800">{p.titulo}</span>
-              <span className="text-xl">
-                {p.abierta ? (
-                  <img src="./img/close.png" width={10} alt="cerrar" />
-                ) : (
-                  <img src="./img/add_edit.png" width={10} alt="abrir" />
-                )}
-              </span>
-            </div>
-
-            {p.abierta && (
-              <div className="px-4 pb-3 text-gray-600">
-                {p.respuestas ? (
-                  <p className="text-green-700 font-medium">{p.respuestas}</p>
-                ) : (
-                  <p className="text-gray-500">
-                    Tu pregunta ha sido registrada. Un administrador podrá
-                    responderla pronto.
-                  </p>
-                )}
-                <p className="text-sm text-gray-500 mt-2">
-                  Preguntado por: <b>{p.nombre}</b> ({p.sexo})
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
+<div className="max-w-6xl mx-auto space-y-4">
+  {filtradas.map((p) => (
+    <div
+      key={p.id}
+      className="border-2 border-gray-400 rounded-lg bg-white shadow-sm overflow-hidden"
+    >
+      <div
+        className="flex justify-between items-center px-4 py-3 cursor-pointer hover:bg-gray-100"
+        onClick={() => togglePregunta(p.id)}
+      >
+        <span className="font-medium text-gray-800">{p.titulo}</span>
+        <img
+          src={p.abierta ? "./img/close.png" : "./img/add_edit.png"}
+          alt={p.abierta ? "cerrar" : "abrir"}
+          className="w-3 h-3 object-contain transition-all duration-200 ml-5"
+        />
       </div>
 
+      {p.abierta && (
+        <div className="px-4 pb-3 text-gray-600">
+          {p.respuestas ? (
+            <p className="text-green-700 font-medium">{p.respuestas}</p>
+          ) : (
+            <p className="text-gray-500">
+              Tu pregunta ha sido registrada. Un administrador podrá responderla pronto.
+            </p>
+          )}
+          <p className="text-sm text-gray-500 mt-2">
+            Preguntado por: <b>{p.nombre}</b> ({p.sexo})
+          </p>
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
       {/* Gráfica */}
-      <div id="grafica" className="max-w-sm mx-auto mt-10">
+      <div id="grafica" className="max-w-sm mx-auto mt-10 hidden lg:flex">
         <Pie data={data} />
       </div>
     </div>

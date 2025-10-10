@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Preguntas from './components/Preguntas'
 import Login from './components/Login'
 import Respuestas from './components/Respuestas'
+import Footer from './components/Footer'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
@@ -32,6 +33,7 @@ function App() {
           element={usuario ? <Respuestas usuario={usuario} /> : <Login setUsuario={setUsuario} />}
         />
       </Routes>
+      <Footer></Footer>
     </Router>
   )
 }

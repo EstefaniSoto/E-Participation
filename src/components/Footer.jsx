@@ -6,7 +6,7 @@ function Footer() {
     <footer className="bg-blue-950 text-white mt-10 pt-10 pb-6">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Columna 1: Logo y descripción */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+        <div className="flex flex-col items-center text-center md:text-left">
           <img src="./img/cupula_blanca.png" alt="Logo" className="w-20 mb-3 rounded-lg shadow-md" />
           <p className="text-md text-purple-100">
             Ministerio de la Mujer

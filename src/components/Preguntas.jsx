@@ -137,7 +137,7 @@ const guardarPregunta = async () => {
           onClick={() => setMostrarModal(true)}
           className="bg-blue-700 text-white px-3 py-3 lg:py-2 lg:px-4 rounded-full lg:rounded-lg shadow hover:bg-blue-700 flex gap-2 items-center"
         >
-          <img src="./img/add.png" alt="" className="w-6 h-5 lg:w-5 lg:h-5" />
+          <img src="./img/add.png" alt="" className="w-6 h-5 md:w-5 md:h-5" />
           <p className="font-bold hidden lg:flex">Añadir pregunta</p>
         </button>
         <button
